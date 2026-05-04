@@ -4,12 +4,13 @@
   "description": "hello connect",
   "main": "index.js",
   "scripts": {
-    "dev" : "nodemon src/app.js",
+    "dev": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "vaibhav apurva",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongoose": "^9.6.1"
   }
 }
