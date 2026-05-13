@@ -2,22 +2,51 @@ const express = require("express");
 const { connectDB } = require("./config/database");
 const app = express();
 const User = require("./models/user");
+const {validateSignUpData} =  require("./utils/validation");
+
+const cookiesParser = require("cookie-parser");
+const jwt = require("jsonwebtoken")
+const {userAuth} = require("./middlewares/auth");
+const authRouter = require("./routers/auth");
+const profileRouter = require("./routers/profile");
+app.use(express.json());
+app.use(cookiesParser());
 
 
-app.post("/signup", async(req, res) => {
- const UserObj = {
-    firstName : "vaibhav",
-    lastName : "Apurva",
-    email : "vaibhavapurva17@gmail.com",
-    password : "vaibhav@123",
-    age: 27,
-    gender : "m"
- }
- const user = new User(UserObj)
- const userData = await user.save();
- res.send("userDate addded" , userData)
+app.use("/", authRouter);
+app.use("/", profileRouter)
+app.get("/feed" , async(req, res) => {
+    try{
+        const users = await User.find({});
+        res.send(users)
+    }catch(err){
+        res.status(400).send("somthing want  worng")
+    }
 });
 
+
+app.delete("/user" , async(req, res) =>{
+  const userID = req.body.userID;
+  try{
+    const user = await  User.findByIdAndDelete(userID);
+    res.send("user deleted")
+  }catch(err){
+        res.status(400).send("somthing want  worng")
+    }
+})
+
+
+
+app.get("/user" , async(req, res) =>{
+    const userEmail = req.body.email;
+
+    try{
+        const user = await  User.findOne({email: userEmail});
+        res.send(user)
+    }catch(err) {
+        res.status(404).send("user can not finds")
+    }
+})
 
 
 connectDB()
@@ -29,6 +58,5 @@ connectDB()
     });
   })
   .catch((err) => {
-    console.log("database can't be connected", err);
+    console.log("database can't be connected -", err);
   });
- 
