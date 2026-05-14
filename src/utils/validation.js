@@ -15,4 +15,22 @@ const validateSignUpData = (req) =>{
 
 }
 
-module.exports = {validateSignUpData}
+const validateProfileDateUpdate = (req) =>{
+    const  ALLOWED_UPDATES = ["userId",'userImage', "about", "gender", "age", "skills"];
+    const isUpdatedAllowed = Object.keys(req.body).every((k) =>  ALLOWED_UPDATES.includes(k));
+    return isUpdatedAllowed
+}
+
+const passwordValition = (req) =>{
+    if(!validator.isStrongPassword(req.body.newPassword)){
+        throw new Error("newPassword is not strong please try another")
+    }
+    else if(req.body.currentPassword === req.body.newPassword){
+        throw new Error("newPassowrd is match oldPassword please user another password")
+    }
+}
+
+module.exports = {validateSignUpData,
+    validateProfileDateUpdate,
+    passwordValition
+}

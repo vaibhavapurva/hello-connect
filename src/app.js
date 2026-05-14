@@ -9,12 +9,14 @@ const jwt = require("jsonwebtoken")
 const {userAuth} = require("./middlewares/auth");
 const authRouter = require("./routers/auth");
 const profileRouter = require("./routers/profile");
+const requestRouter = require("./routers/request");
 app.use(express.json());
 app.use(cookiesParser());
 
 
 app.use("/", authRouter);
-app.use("/", profileRouter)
+app.use("/", profileRouter);
+app.use("/", requestRouter);
 app.get("/feed" , async(req, res) => {
     try{
         const users = await User.find({});

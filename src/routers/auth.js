@@ -5,7 +5,9 @@ const cookiesParser = require("cookie-parser");
 const jwt = require("jsonwebtoken")
 const authRouter = express.Router();
 const {validateSignUpData} =  require("../utils/validation");
-const User = require('../models/user')
+const User = require('../models/user');
+
+
 authRouter.post("/login" , async(req, res) =>{
 
   const {password, email } = req.body;
@@ -31,7 +33,6 @@ authRouter.post("/login" , async(req, res) =>{
   }
 })
 
-
 authRouter.post("/signup", async (req, res) => {
   const {firstName, lastName, email, password, age, gender } = req.body;
   try {
@@ -44,6 +45,12 @@ authRouter.post("/signup", async (req, res) => {
   } catch (err) {
     res.status(400).send("somthing wrong "+ err.message);
   }
+});
+
+
+authRouter.post("/logout", async(req, res) =>{
+  res.cookie("token" , null , {expires : new Date(Date.now())})
+  res.send("User logout")
 });
 
 module.exports = authRouter;
